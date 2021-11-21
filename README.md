@@ -3,10 +3,10 @@
 Input the URL
 Optional slug
 Post to the server
-  - server creates short slug
+  - server creates short slug `Faker::Alphanumeric.alphanumeric(number: 10)`
   - server returns short url (with short slug)
-  - also returns secret key for updating /expiring
-    - combination of slug + nonce
+  - also returns secret key for updating /expiring `Faker::Alphanumeric.alphanumeric(number: 10)`
+    - combination of slug + nonce `"#{slug}-#{secret}"`
 
 Mutation PUT
   - can change the slug
