@@ -120,7 +120,7 @@ paths:
                     description: Status message after deletion
                     example: Link successfully deleted.
 servers:
-- url: https://{defaultHost}
+- url: http://{defaultHost}
   variables:
     defaultHost:
       default: shawty.wtf
