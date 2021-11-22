@@ -1,5 +1,7 @@
 # Shawty - delicious URL shortener
 
+Live at: http://shawty.wtf
+
 ## API Documentation
 
 The following API methods are available for creating short URLs from long ones.
