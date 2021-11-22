@@ -12,4 +12,12 @@ class ApplicationController < ActionController::Base
     end
     nil
   end
+
+  def default_url_options
+    if Rails.env.production?
+      { protocol: 'https' }
+    else
+      { protocol: 'http' }
+    end
+  end
 end
