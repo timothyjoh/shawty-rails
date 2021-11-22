@@ -2,15 +2,34 @@
 
 # Links are the URLs that get shortened and stored
 class Link < ApplicationRecord
+  include Rails.application.routes.url_helpers
+
   validates :slug,
             presence: true,
             uniqueness: { case_sensitive: false }
-  validates :url, presence: true
+  validates :url, presence: true, format: URI::DEFAULT_PARSER.make_regexp(%w[http https])
   validates :secret, presence: true
 
-  after_initialize(:generate_slug)
   after_initialize(:generate_secret)
   after_initialize(:slugify_slug)
+  before_save(:slugify_slug)
+
+  def mutation_key
+    "#{slug}-#{secret}"
+  end
+
+  def to_param
+    mutation_key
+  end
+
+  def self.find_by_mutation_key(mkey)
+    maybeslug, maybesecret = mkey.split('-')
+    find_by(slug: maybeslug, secret: maybesecret)
+  end
+
+  def shorty
+    short_url(slug)
+  end
 
   private
 
@@ -24,6 +43,6 @@ class Link < ApplicationRecord
 
   def slugify_slug
     generate_slug
-    self.slug = slug.parameterize
+    self.slug = slug.parameterize(separator: '_')
   end
 end

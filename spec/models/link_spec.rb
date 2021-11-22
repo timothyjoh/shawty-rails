@@ -42,7 +42,7 @@ RSpec.describe Link, type: :model do
 
     it 'should generate a slug' do
       expect(subject.slug).to_not be_blank
-      expect(subject.slug).to eq('i-would-like-to-keep-this-secret')
+      expect(subject.slug).to eq('i_would_like_to_keep_this_secret')
     end
   end
 end

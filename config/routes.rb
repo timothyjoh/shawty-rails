@@ -1,5 +1,13 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
+  namespace :api do
+    namespace :v1 do
+      resources :links
+    end
+  end
+
+  get '/edit/:mutation_key', to: 'home#edit', as: :editable
+  get '/:slug', to: 'home#short', as: :short
+  get '/', to: 'home#index', as: :home
 end
