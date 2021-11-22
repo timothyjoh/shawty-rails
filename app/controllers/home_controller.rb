@@ -12,7 +12,7 @@ class HomeController < ApplicationController
   end
 
   def edit
-    @link = Link.find_by(mutation_key: params[:mutation_key])
+    @link = find_link
     redirect_to home_path and return unless @link
   end
 end
