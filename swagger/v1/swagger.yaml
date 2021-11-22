@@ -1,0 +1,126 @@
+---
+openapi: 3.0.1
+info:
+  title: API V1
+  version: v1
+paths:
+  "/api/v1/links":
+    post:
+      summary: create link
+      tags:
+      - Convert a URL to a Shorty
+      parameters: []
+      responses:
+        '200':
+          description: The Shorty was successfully created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  url:
+                    type: string
+                    description: The destination URL
+                    example: https://thislongwebsitedomainname.is/way_too_long.html
+                  shorty:
+                    type: string
+                    description: The shortened URL, will redirect to the destination
+                    example: http://shawty.wtf/shortslug
+                  mutation_key:
+                    type: string
+                    description: Use this key in PUT and DELETE API calls
+                    example: shortslug-somesecretkeyforediting
+                  editable:
+                    type: string
+                    description: A URL to an editable form on this site
+                    example: http://shawty.wtf/shortslug-somesecretkeyforediting
+                  message:
+                    type: string
+                    description: Status message after creation
+                    example: Link successfully created.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+                  description: The destination URL that needs shortening
+                  example: https://thislongwebsitedomainname.is/way_too_long.html
+                slug:
+                  type: string
+                  description: A short slug (if blank, this will be auto-generated)
+                  example: shortslug
+  "/api/v1/links/{id}":
+    parameters:
+    - name: id
+      in: path
+      description: The `mutation_key`
+      required: true
+      schema:
+        type: string
+    put:
+      summary: update link
+      tags:
+      - Update the `slug` of a Shorty
+      parameters: []
+      responses:
+        '202':
+          description: The Shorty's slug was successfully updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  url:
+                    type: string
+                    description: The destination URL
+                    example: https://thislongwebsitedomainname.is/way_too_long.html
+                  shorty:
+                    type: string
+                    description: The shortened URL, will redirect to the destination
+                    example: http://shawty.wtf/my_new_slug
+                  mutation_key:
+                    type: string
+                    description: Use this key in PUT and DELETE API calls
+                    example: my_new_slug-somesecretkeyforediting
+                  editable:
+                    type: string
+                    description: A URL to an editable form on this site
+                    example: http://shawty.wtf/my_new_slug-somesecretkeyforediting
+                  message:
+                    type: string
+                    description: Status message after creation
+                    example: Link successfully updated.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                slug:
+                  type: string
+                  description: Update the slug with this parameter
+                  example: My new slug
+    delete:
+      summary: delete link
+      tags:
+      - Delete a Shorty
+      responses:
+        '200':
+          description: The Shorty was deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Status message after deletion
+                    example: Link successfully deleted.
+servers:
+- url: https://{defaultHost}
+  variables:
+    defaultHost:
+      default: www.example.com

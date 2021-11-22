@@ -1,6 +1,128 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
+require 'swagger_helper'
+
+RSpec.describe 'api/v1/links', type: :request do
+  path '/api/v1/links' do
+    post('create link') do
+      tags 'Convert a URL to a Shorty'
+      consumes 'application/json'
+      produces 'application/json'
+      parameter name: :body, in: :body, schema: {
+        type: :object,
+        properties: {
+          url: {
+            type: :string,
+            description: 'The destination URL that needs shortening',
+            example: 'https://thislongwebsitedomainname.is/way_too_long.html'
+          },
+          slug: {
+            type: :string,
+            description: 'A short slug (if blank, this will be auto-generated)',
+            example: 'shortslug'
+          }
+        }
+      }
+
+      response(200, 'The Shorty was successfully created') do
+        schema type: :object,
+               properties: {
+                 url: { type: :string, description: 'The destination URL',
+                        example: 'https://thislongwebsitedomainname.is/way_too_long.html' },
+                 shorty: { type: :string, description: 'The shortened URL, will redirect to the destination',
+                           example: 'http://shawty.wtf/shortslug' },
+                 mutation_key: { type: :string, description: 'Use this key in PUT and DELETE API calls',
+                                 example: 'shortslug-somesecretkeyforediting' },
+                 editable: { type: :string, description: 'A URL to an editable form on this site',
+                             example: 'http://shawty.wtf/shortslug-somesecretkeyforediting' },
+                 message: { type: :string, description: 'Status message after creation',
+                            example: 'Link successfully created.' }
+               }
+        after do |example|
+          example.metadata[:response][:content] = {
+            'application/json' => {
+              example: JSON.parse(response.body, symbolize_names: true)
+            }
+          }
+        end
+        run_test!
+      end
+    end
+  end
+
+  path '/api/v1/links/{id}' do
+    parameter name: 'id', in: :path, type: :string, description: 'The `mutation_key`'
+
+    put('update link') do
+      tags 'Update the `slug` of a Shorty'
+      consumes 'application/json'
+      produces 'application/json'
+      parameter name: :body, in: :body, schema: {
+        type: :object,
+        properties: {
+          slug: {
+            type: :string,
+            description: 'Update the slug with this parameter',
+            example: 'My new slug'
+          }
+        }
+      }
+
+      response(202, 'The Shorty\'s slug was successfully updated') do
+        schema type: :object,
+               properties: {
+                 url: { type: :string, description: 'The destination URL',
+                        example: 'https://thislongwebsitedomainname.is/way_too_long.html' },
+                 shorty: { type: :string, description: 'The shortened URL, will redirect to the destination',
+                           example: 'http://shawty.wtf/my_new_slug' },
+                 mutation_key: { type: :string, description: 'Use this key in PUT and DELETE API calls',
+                                 example: 'my_new_slug-somesecretkeyforediting' },
+                 editable: { type: :string, description: 'A URL to an editable form on this site',
+                             example: 'http://shawty.wtf/my_new_slug-somesecretkeyforediting' },
+                 message: { type: :string, description: 'Status message after creation',
+                            example: 'Link successfully updated.' }
+               }
+
+        let(:id) { Link.create(url: 'https://thisisthelongesturlever.co.uk').mutation_key }
+
+        after do |example|
+          example.metadata[:response][:content] = {
+            'application/json' => {
+              example: JSON.parse(response.body, symbolize_names: true)
+            }
+          }
+        end
+        run_test!
+      end
+    end
+
+    delete('delete link') do
+      tags 'Delete a Shorty'
+      consumes 'application/json'
+      produces 'application/json'
+
+      response(200, 'The Shorty was deleted') do
+        schema type: :object,
+               properties: {
+                 message: { type: :string, description: 'Status message after deletion',
+                            example: 'Link successfully deleted.' }
+               }
+
+        let(:id) { Link.create(url: 'https://thisisthelongesturlever.co.uk').mutation_key }
+
+        after do |example|
+          example.metadata[:response][:content] = {
+            'application/json' => {
+              example: JSON.parse(response.body, symbolize_names: true)
+            }
+          }
+        end
+        run_test!
+      end
+    end
+  end
+end
 
 # rubocop:disable Metrics/BlockLength
 RSpec.describe 'Api::V1::Links', type: :request do
