@@ -8,7 +8,7 @@ module Api
       def create
         @link = Link.new(link_creation_params)
         if @link.save
-          render json: @link.as_json(only: %i[url], methods: %i[mutation_key shorty])
+          render json: link_json(@link, 'Link successfully created.')
         else
           render error: { error: 'Unable to create User.' }, status: :bad_request
         end
@@ -16,10 +16,10 @@ module Api
 
       # PUT /users/:id
       def update
-        @link = Link.find_by(mutation_key: params[:mutation_key])
+        @link = find_link
         if @link
           @link.update(link_mutation_params)
-          render json: { message: 'Link successfully updated. ' }, status: :ok
+          render json: link_json(@link, 'Link successfully updated.'), status: :accepted
         else
           render json: { error: 'Unable to update link. ' }, status: :bad_request
         end
@@ -27,12 +27,12 @@ module Api
 
       # DELETE /users/:id
       def destroy
-        @link = Link.find_by(mutation_key: params[:mutation_key])
+        @link = find_link
         if @link
           @link.destroy
-          render json: { message: 'Link successfully deleted. ' }, status: :ok
+          render json: { message: 'Link successfully deleted.', url: @link.url }, status: :ok
         else
-          render json: { error: 'Unable to delete User. ' }, status: :bad_request
+          render json: { error: 'Unable to delete link.', url: @link.url }, status: :bad_request
         end
       end
 
@@ -43,7 +43,11 @@ module Api
       end
 
       def link_mutation_params
-        params.permit(:mutation_key, :slug)
+        params.permit(:slug)
+      end
+
+      def link_json(link, message)
+        link.as_json(only: %i[url], methods: %i[mutation_key shorty]).merge({ message: message })
       end
     end
   end

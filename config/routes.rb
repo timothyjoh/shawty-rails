@@ -7,7 +7,7 @@ Rails.application.routes.draw do
     end
   end
 
-  get '/edit/:mutation_key', to: 'home#edit', as: :editable
+  get '/edit/:id', to: 'home#edit', as: :editable
   get '/:slug', to: 'home#short', as: :short
   get '/', to: 'home#index', as: :home
 end

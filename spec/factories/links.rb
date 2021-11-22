@@ -3,7 +3,7 @@
 FactoryBot.define do
   factory :link do
     url { "https://#{Faker::Internet.domain_name}" }
-    slug {}
-    secret {}
+    slug { Faker::Alphanumeric.alphanumeric(number: 8) }
+    secret { Faker::Alphanumeric.alphanumeric(number: 16) }
   end
 end
