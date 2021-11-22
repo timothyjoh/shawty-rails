@@ -47,7 +47,7 @@ module Api
       end
 
       def link_json(link, message)
-        link.as_json(only: %i[url], methods: %i[mutation_key shorty]).merge({ message: message })
+        link.as_json(only: %i[url], methods: %i[mutation_key shorty editable]).merge({ message: message })
       end
     end
   end

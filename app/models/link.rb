@@ -31,6 +31,10 @@ class Link < ApplicationRecord
     short_url(slug)
   end
 
+  def editable
+    editable_url(mutation_key)
+  end
+
   private
 
   def generate_slug

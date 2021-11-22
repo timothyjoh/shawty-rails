@@ -25,6 +25,8 @@ gem 'jbuilder', '~> 2.7'
 # gem 'bcrypt', '~> 3.1.7'
 # Use Faker for testing and for generating slugs
 gem 'faker'
+# Use Rswag to document the API
+gem 'rswag'
 
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'
@@ -41,6 +43,7 @@ group :development, :test do
   gem 'guard-rspec'
   gem 'pry-rails'
   gem 'rspec-rails', '~> 5.0.0'
+  gem 'rswag-specs'
   gem 'rubocop-rails', require: false
   gem 'shoulda-matchers'
 end
