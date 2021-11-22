@@ -31,7 +31,7 @@ Rails.application.configure do
 
   # Do not fallback to assets pipeline if a precompiled asset is missed.
   config.assets.compile = false
-  Rails.application.routes.default_url_options[:protocol] = 'https'
+  Rails.application.routes.default_url_options[:protocol] = 'http'
   Rails.application.routes.default_url_options[:host] = 'shawty.wtf'
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
