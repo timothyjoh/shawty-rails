@@ -8,9 +8,9 @@ module Api
       def create
         @link = Link.new(link_creation_params)
         if @link.save
-          render json: link_json(@link, 'Link successfully created.')
+          render json: link_json(@link, 'Link successfully created.'), status: :ok, content_type: 'application/json'
         else
-          render error: { error: 'Unable to create User.' }, status: :bad_request
+          render json: { error: 'Unable to create Link.' }, status: :bad_request, content_type: 'application/json'
         end
       end
 
@@ -19,7 +19,8 @@ module Api
         @link = find_link
         if @link
           @link.update(link_mutation_params)
-          render json: link_json(@link, 'Link successfully updated.'), status: :accepted
+          render json: link_json(@link, 'Link successfully updated.'), status: :accepted,
+                 content_type: 'application/json'
         else
           render json: { error: 'Unable to update link. ' }, status: :bad_request
         end
@@ -30,7 +31,8 @@ module Api
         @link = find_link
         if @link
           @link.destroy
-          render json: { message: 'Link successfully deleted.', url: @link.url }, status: :ok
+          render json: { message: 'Link successfully deleted.', url: @link.url }, status: :ok,
+                 content_type: 'application/json'
         else
           render json: { error: 'Unable to delete link.', url: @link.url }, status: :bad_request
         end

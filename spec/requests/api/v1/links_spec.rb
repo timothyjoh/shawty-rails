@@ -3,6 +3,7 @@
 require 'rails_helper'
 require 'swagger_helper'
 
+# rubocop:disable Metrics/BlockLength
 RSpec.describe 'api/v1/links', type: :request do
   path '/api/v1/links' do
     post('create link') do
@@ -39,13 +40,7 @@ RSpec.describe 'api/v1/links', type: :request do
                  message: { type: :string, description: 'Status message after creation',
                             example: 'Link successfully created.' }
                }
-        after do |example|
-          example.metadata[:response][:content] = {
-            'application/json' => {
-              example: JSON.parse(response.body, symbolize_names: true)
-            }
-          }
-        end
+        let(:body) { { url: 'http://sdfsdfwerwewr.com' } }
         run_test!
       end
     end
@@ -85,14 +80,6 @@ RSpec.describe 'api/v1/links', type: :request do
                }
 
         let(:id) { Link.create(url: 'https://thisisthelongesturlever.co.uk').mutation_key }
-
-        after do |example|
-          example.metadata[:response][:content] = {
-            'application/json' => {
-              example: JSON.parse(response.body, symbolize_names: true)
-            }
-          }
-        end
         run_test!
       end
     end
@@ -110,21 +97,12 @@ RSpec.describe 'api/v1/links', type: :request do
                }
 
         let(:id) { Link.create(url: 'https://thisisthelongesturlever.co.uk').mutation_key }
-
-        after do |example|
-          example.metadata[:response][:content] = {
-            'application/json' => {
-              example: JSON.parse(response.body, symbolize_names: true)
-            }
-          }
-        end
         run_test!
       end
     end
   end
 end
 
-# rubocop:disable Metrics/BlockLength
 RSpec.describe 'Api::V1::Links', type: :request do
   describe 'POST /api/v1/links' do
     context 'with custom slug' do
