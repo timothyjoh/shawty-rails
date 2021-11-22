@@ -1,6 +1,9 @@
 # Shawty - delicious URL shortener
 
-Live at: http://shawty.wtf
+A free-to-use public URL shortener.
+
+* API-first, POST to http://shawty.wtf/api/v1/links
+* Live website at: http://shawty.wtf
 
 ## API Documentation
 
